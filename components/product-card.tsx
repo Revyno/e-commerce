@@ -2,9 +2,10 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Star, Heart } from "lucide-react"
+import { Star, Heart, ThumbsDown } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useWishlist } from "@/hooks/use-wishlist"
+import { useDislike } from "@/hooks/use-dislike"
 import { useCart } from "@/hooks/use-cart"
 import { Skeleton } from "./ui/skeleton"
 import { useState } from "react"
@@ -24,8 +25,10 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { wishlist, toggleWishlist } = useWishlist()
+  const { dislikes, toggleDislike } = useDislike()
   const { addToCart } = useCart()
   const isWishlisted = wishlist.includes(product.id)
+  const isDisliked = dislikes.includes(product.id)
   const [imageLoading, setImageLoading] = useState(true)
 
   const discountedPrice = (product.price * (1 - product.discountPercentage / 100)).toFixed(2)
@@ -44,6 +47,17 @@ export function ProductCard({ product }: ProductCardProps) {
           onLoad={() => setImageLoading(false)}
           onError={() => setImageLoading(false)}
         />
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            toggleDislike(product.id)
+          }}
+          className={`absolute top-3 right-14 p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity ${
+            isDisliked ? "bg-red-500 text-white opacity-100" : "bg-white text-foreground hover:bg-red-50"
+          }`}
+        >
+          <ThumbsDown className={`w-4 h-4 ${isDisliked ? "fill-current" : ""}`} />
+        </button>
         <button
           onClick={(e) => {
             e.preventDefault()

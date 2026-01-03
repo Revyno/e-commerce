@@ -1,10 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { Search, User, Heart } from "lucide-react"
+import { Search, User, Heart, ThumbsDown } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useCart } from "@/hooks/use-cart"
 import { useWishlist } from "@/hooks/use-wishlist"
+import { useDislike } from "@/hooks/use-dislike"
 import { CartSidebar } from "@/components/cart-sidebar"
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -12,6 +13,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 export function Navbar() {
   const { cart } = useCart()
   const { wishlist } = useWishlist()
+  const { dislikes } = useDislike()
   const router = useRouter()
   const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
@@ -63,6 +65,14 @@ export function Navbar() {
           </button>
           <button className="p-2 hover:bg-secondary rounded-full">
             <User className="w-5 h-5" />
+          </button>
+          <button className="p-2 hover:bg-secondary rounded-full relative">
+            <ThumbsDown className="w-5 h-5" />
+            {dislikes.length > 0 && (
+              <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-[10px] text-white rounded-full flex items-center justify-center">
+                {dislikes.length}
+              </span>
+            )}
           </button>
           <button className="p-2 hover:bg-secondary rounded-full relative">
             <Heart className="w-5 h-5" />

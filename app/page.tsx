@@ -88,6 +88,7 @@ export default async function HomePage({
     minPrice?: string;
     maxPrice?: string;
     rating?: string;
+    brand?: string;
   };
 }) {
   const params = await searchParams;
@@ -98,10 +99,29 @@ export default async function HomePage({
   const minPrice = params.minPrice;
   const maxPrice = params.maxPrice;
   const rating = params.rating;
+  const brand = params.brand;
   const currentPage = Number(params.page) || 1;
   const skip = (currentPage - 1) * 12;
 
-  const { products, total } = await getProducts(category, search, skip, sort);
+  let { products, total } = await getProducts(category, search, skip, sort);
+
+  // Apply client-side filtering
+  if (minPrice || maxPrice || rating || brand) {
+    products = products.filter((product: any) => {
+      const price = product.price;
+      const productRating = product.rating;
+      const productBrand = product.brand?.toLowerCase();
+
+      if (minPrice && price < parseFloat(minPrice)) return false;
+      if (maxPrice && price > parseFloat(maxPrice)) return false;
+      if (rating && productRating < parseFloat(rating)) return false;
+      if (brand && productBrand && !productBrand.includes(brand.toLowerCase())) return false;
+
+      return true;
+    });
+    total = products.length;
+  }
+
   const totalPages = Math.ceil(total / 12);
 
   const buildQueryString = (
@@ -203,68 +223,60 @@ export default async function HomePage({
                 </Button>
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <form id="filterForm" className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
                 <label className="text-sm font-medium mb-2 block">
                   Min Price
                 </label>
-                <Link
-                  href={`?${buildQueryString({
-                    minPrice: "0",
-                    filter: "open",
-                  })}`}
-                >
-                  <Button variant="outline" size="sm" className="w-full">
-                    $0
-                  </Button>
-                </Link>
+                <input
+                  type="number"
+                  name="minPrice"
+                  defaultValue={minPrice || ""}
+                  placeholder="0"
+                  className="w-full px-3 py-2 border border-border rounded-md bg-background"
+                />
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">
                   Max Price
                 </label>
-                <Link
-                  href={`?${buildQueryString({
-                    maxPrice: "100",
-                    filter: "open",
-                  })}`}
-                >
-                  <Button variant="outline" size="sm" className="w-full">
-                    $100
-                  </Button>
-                </Link>
+                <input
+                  type="number"
+                  name="maxPrice"
+                  defaultValue={maxPrice || ""}
+                  placeholder="1000"
+                  className="w-full px-3 py-2 border border-border rounded-md bg-background"
+                />
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Rating</label>
-                <Link
-                  href={`?${buildQueryString({ rating: "4", filter: "open" })}`}
-                >
-                  <Button variant="outline" size="sm" className="w-full">
-                    4+ Stars
-                  </Button>
-                </Link>
+                <input
+                  type="number"
+                  name="rating"
+                  min="1"
+                  max="5"
+                  step="0.1"
+                  defaultValue={rating || ""}
+                  placeholder="4.0"
+                  className="w-full px-3 py-2 border border-border rounded-md bg-background"
+                />
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Brand</label>
-                <Link
-                  href={`?${buildQueryString({
-                    brand: "Apple",
-                    filter: "open",
-                  })}`}
-                >
-                  <Button variant="outline" size="sm" className="w-full">
-                    Apple
-                  </Button>
-                </Link>
+                <input
+                  type="text"
+                  name="brand"
+                  defaultValue={params.brand || ""}
+                  placeholder="Apple, Samsung, etc."
+                  className="w-full px-3 py-2 border border-border rounded-md bg-background"
+                />
               </div>
-            </div>
+            </form>
             <div className="flex gap-4 mt-6">
               <Link href={`?${buildQueryString({ filter: undefined })}`}>
                 <Button variant="outline">Clear All</Button>
               </Link>
-              <Link href={`?${buildQueryString({ filter: undefined })}`}>
-                <Button>Apply Filters</Button>
-              </Link>
+              <Button type="submit" form="filterForm">Apply Filters</Button>
             </div>
           </div>
         )}

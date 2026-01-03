@@ -1,17 +1,20 @@
 "use client"
 
-import { Star, Heart, Share2, MessageCircle } from "lucide-react"
+import { Star, Heart, Share2, MessageCircle, ThumbsDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/hooks/use-cart"
 import { useWishlist } from "@/hooks/use-wishlist"
+import { useDislike } from "@/hooks/use-dislike"
 import { useState } from "react"
 import { toast } from "sonner"
 
 export function ProductDetails({ product }: { product: any }) {
   const { addToCart } = useCart()
   const { wishlist, toggleWishlist } = useWishlist()
+  const { dislikes, toggleDislike } = useDislike()
   const [selectedSize, setSelectedSize] = useState("S")
   const isWishlisted = wishlist.includes(product.id)
+  const isDisliked = dislikes.includes(product.id)
 
   const handleAddToCart = () => {
     addToCart(product)
@@ -91,6 +94,12 @@ export function ProductDetails({ product }: { product: any }) {
       <div className="flex items-center justify-between border-t pt-6 text-sm font-medium">
         <button className="flex items-center gap-2 hover:text-primary transition-colors">
           <MessageCircle className="w-4 h-4" /> Chat
+        </button>
+        <button
+          onClick={() => toggleDislike(product.id)}
+          className={`flex items-center gap-2 transition-colors ${isDisliked ? "text-red-500 font-bold" : "hover:text-red-500"}`}
+        >
+          <ThumbsDown className={`w-4 h-4 ${isDisliked ? "fill-current" : ""}`} /> Dislike
         </button>
         <button
           onClick={() => toggleWishlist(product.id)}
