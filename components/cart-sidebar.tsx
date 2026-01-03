@@ -36,8 +36,8 @@ export function CartSidebar() {
               <p className="text-muted-foreground">Your cart is empty</p>
             </div>
           ) : (
-            cart.map((item) => (
-              <div key={item.id} className="flex gap-4">
+            cart.map((item, index) => (
+              <div key={`${item.id}-${index}`} className="flex gap-4">
                 <div className="relative w-20 h-24 rounded-lg bg-secondary overflow-hidden shrink-0">
                   <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
                 </div>

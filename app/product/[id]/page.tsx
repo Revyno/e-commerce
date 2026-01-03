@@ -7,8 +7,34 @@ import Link from "next/link"
 import { ProductDetails } from "@/components/product-details"
 
 async function getProduct(id: string) {
-  const res = await fetch(`https://dummyjson.com/products/${id}`)
-  return res.json()
+  try {
+    const res = await fetch(`https://dummyjson.com/products/${id}`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; E-commerce App)',
+      }
+    });
+
+    if (!res.ok) {
+      console.error(`API Error: ${res.status} ${res.statusText} for product ID: ${id}`);
+      throw new Error("Failed to fetch product");
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error('Network error fetching product:', error);
+    // Return a fallback product
+    return {
+      id: parseInt(id),
+      title: "Product Not Found",
+      description: "This product could not be loaded.",
+      price: 0,
+      rating: 0,
+      thumbnail: "/placeholder.svg",
+      images: ["/placeholder.svg"],
+      brand: "Unknown",
+      category: "Unknown"
+    };
+  }
 }
 
 async function getRelatedProducts() {
@@ -16,14 +42,14 @@ async function getRelatedProducts() {
   return res.json()
 }
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = await getProduct(params.id)
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const product = await getProduct(id)
   const { products: related } = await getRelatedProducts()
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-
       <div className="container mx-auto px-4 py-6">
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">

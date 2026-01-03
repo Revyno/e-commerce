@@ -6,10 +6,24 @@ import { Input } from "@/components/ui/input"
 import { useCart } from "@/hooks/use-cart"
 import { useWishlist } from "@/hooks/use-wishlist"
 import { CartSidebar } from "@/components/cart-sidebar"
+import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export function Navbar() {
   const { cart } = useCart()
   const { wishlist } = useWishlist()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/?search=${encodeURIComponent(searchQuery.trim())}`)
+    } else {
+      router.push('/')
+    }
+  }
 
   return (
     <nav className="border-b sticky top-0 bg-background z-50">
@@ -19,24 +33,29 @@ export function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-          <Link href="/" className="hover:text-primary transition-colors">
+          <Link href={searchParams.get('search') ? `/?search=${searchParams.get('search')}` : "/"} className="hover:text-primary transition-colors">
             Home
           </Link>
-          <Link href="/?category=mens-shirts" className="hover:text-primary transition-colors">
+          <Link href={`/?${searchParams.get('search') ? `search=${searchParams.get('search')}&` : ""}category=mens-shirts`} className="hover:text-primary transition-colors">
             Man
           </Link>
-          <Link href="/?category=womens-dresses" className="hover:text-primary transition-colors">
+          <Link href={`/?${searchParams.get('search') ? `search=${searchParams.get('search')}&` : ""}category=womens-dresses`} className="hover:text-primary transition-colors">
             Woman
           </Link>
-          <Link href="/?category=tops" className="hover:text-primary transition-colors">
+          <Link href={`/?${searchParams.get('search') ? `search=${searchParams.get('search')}&` : ""}category=tops`} className="hover:text-primary transition-colors">
             Kids
           </Link>
         </div>
 
-        <div className="flex-1 max-w-md hidden lg:block relative">
+        <form onSubmit={handleSearch} className="flex-1 max-w-md hidden lg:block relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input placeholder="Search a products" className="pl-10 bg-secondary border-none rounded-full h-10" />
-        </div>
+          <Input
+            placeholder="Search products"
+            className="pl-10 bg-secondary border-none rounded-full h-10"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </form>
 
         <div className="flex items-center gap-4">
           <button className="p-2 hover:bg-secondary rounded-full lg:hidden">

@@ -6,6 +6,8 @@ import { Star, Heart } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useWishlist } from "@/hooks/use-wishlist"
 import { useCart } from "@/hooks/use-cart"
+import { Skeleton } from "./ui/skeleton"
+import { useState } from "react"
 
 interface ProductCardProps {
   product: {
@@ -24,17 +26,23 @@ export function ProductCard({ product }: ProductCardProps) {
   const { wishlist, toggleWishlist } = useWishlist()
   const { addToCart } = useCart()
   const isWishlisted = wishlist.includes(product.id)
+  const [imageLoading, setImageLoading] = useState(true)
 
   const discountedPrice = (product.price * (1 - product.discountPercentage / 100)).toFixed(2)
 
   return (
     <div className="group relative">
       <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-secondary mb-4">
+        {imageLoading && (
+          <Skeleton className="absolute inset-0 rounded-xl" />
+        )}
         <Image
           src={product.thumbnail || "/placeholder.svg"}
           alt={product.title}
           fill
           className="object-cover transition-transform group-hover:scale-105"
+          onLoad={() => setImageLoading(false)}
+          onError={() => setImageLoading(false)}
         />
         <button
           onClick={(e) => {
@@ -60,7 +68,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         {product.discountPercentage > 10 && (
           <Badge className="absolute top-3 left-3 bg-white text-primary hover:bg-white" variant="secondary">
-            Sale
+            New Arrivals
           </Badge>
         )}
       </div>
