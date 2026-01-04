@@ -142,7 +142,7 @@ export default async function HomePage({
     <main className="min-h-screen flex flex-col">
       <Navbar />
 
-      <div className="container mx-auto px-4 py-8 flex-grow">
+      <div className="w-full max-w-screen-xl mx-auto px-4 py-8 flex-grow overflow-x-hidden">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2 capitalize">
@@ -334,7 +334,7 @@ export default async function HomePage({
           </Link>
 
           <div className="flex items-center gap-2">
-            {[...Array(Math.min(totalPages, 50))].map((_, i) => {
+            {[...Array(Math.min(totalPages, 3))].map((_, i) => {
               const p = i + 1;
               return (
                 <Link key={p} href={`?${buildQueryString({ page: p })}`}>
@@ -351,7 +351,7 @@ export default async function HomePage({
                 </Link>
               );
             })}
-            {totalPages > 5 && (
+            {totalPages > 10 && (
               <span className="text-muted-foreground px-2">...</span>
             )}
           </div>

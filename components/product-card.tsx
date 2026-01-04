@@ -52,8 +52,10 @@ export function ProductCard({ product }: ProductCardProps) {
             e.preventDefault()
             toggleDislike(product.id)
           }}
-          className={`absolute top-3 right-14 p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity ${
-            isDisliked ? "bg-red-500 text-white opacity-100" : "bg-white text-foreground hover:bg-red-50"
+          className={`absolute top-3 right-14 p-2 rounded-full shadow-sm transition-all duration-200 ${
+            isDisliked
+              ? "bg-red-500 text-white opacity-100 scale-110"
+              : "bg-white/90 text-foreground opacity-70 hover:opacity-100 hover:bg-red-50 hover:scale-105"
           }`}
         >
           <ThumbsDown className={`w-4 h-4 ${isDisliked ? "fill-current" : ""}`} />
@@ -63,8 +65,10 @@ export function ProductCard({ product }: ProductCardProps) {
             e.preventDefault()
             toggleWishlist(product.id)
           }}
-          className={`absolute top-3 right-3 p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity ${
-            isWishlisted ? "bg-primary text-white opacity-100" : "bg-white text-foreground"
+          className={`absolute top-3 right-3 p-2 rounded-full shadow-sm transition-all duration-200 ${
+            isWishlisted
+              ? "bg-primary text-white opacity-100 scale-110"
+              : "bg-white/90 text-foreground opacity-70 hover:opacity-100 hover:bg-primary/10 hover:scale-105"
           }`}
         >
           <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />

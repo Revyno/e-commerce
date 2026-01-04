@@ -29,7 +29,7 @@ export function Navbar() {
 
   return (
     <nav className="border-b sticky top-0 bg-background z-50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">
+      <div className="w-full max-w-screen-xl mx-auto px-4 py-4 flex items-center justify-between gap-4 overflow-x-hidden">
         <Link href="/" className="text-2xl font-bold text-primary tracking-tight">
           Shopz
         </Link>
@@ -66,22 +66,22 @@ export function Navbar() {
           <button className="p-2 hover:bg-secondary rounded-full">
             <User className="w-5 h-5" />
           </button>
-          <button className="p-2 hover:bg-secondary rounded-full relative">
+          <Link href="/dislikes" className="p-2 hover:bg-secondary rounded-full relative">
             <ThumbsDown className="w-5 h-5" />
             {dislikes.length > 0 && (
               <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-[10px] text-white rounded-full flex items-center justify-center">
                 {dislikes.length}
               </span>
             )}
-          </button>
-          <button className="p-2 hover:bg-secondary rounded-full relative">
+          </Link>
+          <Link href="/wishlist" className="p-2 hover:bg-secondary rounded-full relative">
             <Heart className="w-5 h-5" />
             {wishlist.length > 0 && (
               <span className="absolute top-1 right-1 w-4 h-4 bg-primary text-[10px] text-white rounded-full flex items-center justify-center">
                 {wishlist.length}
               </span>
             )}
-          </button>
+          </Link>
           <CartSidebar />
         </div>
       </div>

@@ -4,7 +4,7 @@ import Link from "next/link"
 export function Footer() {
   return (
     <footer className="bg-[#1A1A1A] text-white pt-16 pb-8">
-      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+      <div className="w-full max-w-screen-xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16 overflow-x-hidden">
         <div className="lg:col-span-2">
           <h2 className="text-3xl font-bold mb-6">Shopz</h2>
           <p className="text-sm text-gray-400 max-w-sm leading-relaxed">
@@ -96,7 +96,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+      <div className="w-full max-w-screen-xl mx-auto px-4 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 overflow-x-hidden">
         <p>@Shopz 2023. All rights reserved.</p>
         <div className="flex gap-6">
           <Link href="#" className="hover:text-white">
