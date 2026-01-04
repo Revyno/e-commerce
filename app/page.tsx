@@ -142,7 +142,7 @@ export default async function HomePage({
     <main className="min-h-screen flex flex-col">
       <NavbarWrapper />
 
-      <div className="w-full max-w-screen-xl mx-auto px-4 py-8 flex-grow overflow-x-hidden">
+      <div className="w-full max-w-screen-xl mx-auto px-4 py-8 pt-20 flex-grow overflow-x-hidden">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2 capitalize">

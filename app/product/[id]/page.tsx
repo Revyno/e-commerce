@@ -50,7 +50,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   return (
     <div className="min-h-screen flex flex-col">
       <NavbarWrapper />
-      <div className="w-full max-w-screen-xl mx-auto px-4 py-6 overflow-x-hidden">
+      <div className="w-full max-w-screen-xl mx-auto px-4 py-6 pt-20 overflow-x-hidden">
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
           <Link href="/">Home</Link>

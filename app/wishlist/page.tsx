@@ -44,7 +44,7 @@ export default function WishlistPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <NavbarWrapper />
-      <div className="w-full max-w-screen-xl mx-auto px-4 py-8 flex-grow overflow-x-hidden">
+      <div className="w-full max-w-screen-xl mx-auto px-4 py-8 pt-20 flex-grow overflow-x-hidden">
         <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
           <Link href="/">Home</Link>
           <span>/</span>
