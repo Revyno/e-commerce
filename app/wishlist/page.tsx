@@ -1,6 +1,6 @@
 "use client"
 
-import { Navbar } from "@/components/navbar"
+import { NavbarWrapper } from "@/components/navbar-wrapper"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { useWishlist } from "@/hooks/use-wishlist"
@@ -43,7 +43,7 @@ export default function WishlistPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <NavbarWrapper />
       <div className="w-full max-w-screen-xl mx-auto px-4 py-8 flex-grow overflow-x-hidden">
         <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
           <Link href="/">Home</Link>

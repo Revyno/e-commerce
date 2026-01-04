@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/navbar"
+import { NavbarWrapper } from "@/components/navbar-wrapper"
 import { Footer } from "@/components/footer"
 import Image from "next/image"
 import { Star, ChevronRight } from "lucide-react"
@@ -49,7 +49,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <NavbarWrapper />
       <div className="w-full max-w-screen-xl mx-auto px-4 py-6 overflow-x-hidden">
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">

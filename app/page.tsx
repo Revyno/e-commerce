@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/navbar";
+import { NavbarWrapper } from "@/components/navbar-wrapper";
 import { Footer } from "@/components/footer";
 import { ProductCard } from "@/components/product-card";
 import { Button } from "@/components/ui/button";
@@ -140,7 +140,7 @@ export default async function HomePage({
 
   return (
     <main className="min-h-screen flex flex-col">
-      <Navbar />
+      <NavbarWrapper />
 
       <div className="w-full max-w-screen-xl mx-auto px-4 py-8 flex-grow overflow-x-hidden">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
