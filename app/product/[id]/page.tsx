@@ -149,7 +149,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
       </div>
-
       <Footer />
     </div>
   )
