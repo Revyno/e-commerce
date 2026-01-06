@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import TechLogoLoop from "@/components/TechLogoLoop";
+import Cryptojs from "crypto-js";
 
 async function getProducts(
   category?: string,
@@ -67,7 +68,7 @@ async function getProducts(
         );
       return fallbackRes.json();
     }
-
+    // const product = 
     return res.json();
   } catch (error) {
     console.error("Network error fetching products:", error);
@@ -105,6 +106,16 @@ export default async function HomePage({
 
   let { products, total } = await getProducts(category, search, skip, sort);
 
+  products = products.map((product: any) => {
+    return{
+      ...product,
+      // Encrypt the product ID
+      idEncrypted: Cryptojs.AES.encrypt(product.id.toString(),"test").toString().replace(/\//g, '_').replace(/\+/g, '-')
+
+    }
+
+  })
+  console.log("Encrypted Products:", products);
   // Apply client-side filtering
   if (minPrice || maxPrice || rating || brand) {
     products = products.filter((product: any) => {
@@ -232,7 +243,7 @@ export default async function HomePage({
                   type="number"
                   name="minPrice"
                   defaultValue={minPrice || ""}
-                  placeholder="0"
+                  placeholder="$0"
                   className="w-full px-3 py-2 border border-border rounded-md bg-background"
                 />
               </div>
@@ -244,7 +255,7 @@ export default async function HomePage({
                   type="number"
                   name="maxPrice"
                   defaultValue={maxPrice || ""}
-                  placeholder="1000"
+                  placeholder="$1000"
                   className="w-full px-3 py-2 border border-border rounded-md bg-background"
                 />
               </div>

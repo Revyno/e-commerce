@@ -8,6 +8,7 @@ import { useDislike } from "@/hooks/use-dislike"
 import { useState } from "react"
 import { toast } from "sonner"
 
+
 export function ProductDetails({ product }: { product: any }) {
   const { addToCart } = useCart()
   const { wishlist, toggleWishlist } = useWishlist()

@@ -1,27 +1,32 @@
-import { NavbarWrapper } from "@/components/navbar-wrapper"
-import { Footer } from "@/components/footer"
-import Image from "next/image"
-import { Star, ChevronRight } from "lucide-react"
-import { ProductCard } from "@/components/product-card"
-import Link from "next/link"
-import { ProductDetails } from "@/components/product-details"
+import { NavbarWrapper } from "@/components/navbar-wrapper";
+import { Footer } from "@/components/footer";
+import Image from "next/image";
+import { Star, ChevronRight } from "lucide-react";
+import { ProductCard } from "@/components/product-card";
+import Link from "next/link";
+import { ProductDetails } from "@/components/product-details";
+import CryptoJS from "crypto-js";
+import { notFound } from "next/navigation";
 
 async function getProduct(id: string) {
+  console.log("Fetching product with ID:", id);
   try {
     const res = await fetch(`https://dummyjson.com/products/${id}`, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; E-commerce App)',
-      }
+        "User-Agent": "Mozilla/5.0 (compatible; E-commerce App)",
+      },
     });
-
+    // console.log("API Response Status:", res);
     if (!res.ok) {
-      console.error(`API Error: ${res.status} ${res.statusText} for product ID: ${id}`);
+      console.error(
+        `API Error: ${res.status} ${res.statusText} for product ID: ${id}`
+      );
       throw new Error("Failed to fetch product");
     }
 
     return res.json();
   } catch (error) {
-    console.error('Network error fetching product:', error);
+    console.error("Network error fetching product:", error);
     // Return a fallback product
     return {
       id: parseInt(id),
@@ -32,20 +37,39 @@ async function getProduct(id: string) {
       thumbnail: "/placeholder.svg",
       images: ["/placeholder.svg"],
       brand: "Unknown",
-      category: "Unknown"
+      category: "Unknown",
     };
   }
 }
 
 async function getRelatedProducts() {
-  const res = await fetch("https://dummyjson.com/products?limit=4")
-  return res.json()
+  const res = await fetch("https://dummyjson.com/products?limit=4");
+  return res.json();
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const product = await getProduct(id)
-  const { products: related } = await getRelatedProducts()
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  console.log("Received encrypted ID:", id);
+  let originalId: string;
+  try {
+    let decodedId = decodeURIComponent(id);
+    let encrypted = decodedId.replace(/_/g, '/').replace(/-/g, '+');
+    let bytes = CryptoJS.AES.decrypt(encrypted, "test");
+    originalId = bytes.toString(CryptoJS.enc.Utf8);
+    if (!originalId || isNaN(parseInt(originalId))) {
+      throw new Error("Invalid decrypted ID");
+    }
+  } catch (error) {
+    console.error("Decryption failed:", error);
+    notFound();
+  }
+  console.log("Decrypted ID:", originalId);
+  const product = await getProduct(originalId);
+  const { products: related } = await getRelatedProducts();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -66,7 +90,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           {/* Gallery */}
           <div className="space-y-4">
             <div className="aspect-[4/5] relative rounded-3xl overflow-hidden bg-secondary">
-              <Image src={product.thumbnail || "/placeholder.svg"} alt={product.title} fill className="object-cover" />
+              <Image
+                src={product.thumbnail || "/placeholder.svg"}
+                alt={product.title || "Product image"}
+                fill
+                className="object-cover"
+              />
             </div>
             <div className="grid grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
@@ -76,7 +105,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 >
                   <Image
                     src={product.thumbnail || "/placeholder.svg"}
-                    alt={product.title}
+                    alt={product.title || "Product image"}
                     fill
                     className="object-cover"
                   />
@@ -92,7 +121,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         {/* Reviews Section Placeholder */}
         <div className="mb-20">
           <div className="flex gap-12 border-b mb-8 text-sm font-bold uppercase tracking-wider">
-            <button className="pb-4 border-b-2 border-primary text-primary">Reviews</button>
+            <button className="pb-4 border-b-2 border-primary text-primary">
+              Reviews
+            </button>
             <button className="pb-4 text-muted-foreground">Details</button>
             <button className="pb-4 text-muted-foreground">Discussion</button>
           </div>
@@ -107,13 +138,17 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                       <h4 className="font-bold">User {i}</h4>
                       <div className="flex gap-0.5">
                         {[1, 2, 3, 4, 5].map((s) => (
-                          <Star key={s} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          <Star
+                            key={s}
+                            className="w-3 h-3 fill-yellow-400 text-yellow-400"
+                          />
                         ))}
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      A simple Sweater but makes the user seem neat and beautiful, the material is soft, but when worn
-                      it often wrinkles because of sitting for too long.
+                      A simple Sweater but makes the user seem neat and
+                      beautiful, the material is soft, but when worn it often
+                      wrinkles because of sitting for too long.
                     </p>
                   </div>
                 </div>
@@ -130,7 +165,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   <div key={s} className="flex items-center gap-3">
                     <span className="text-xs font-medium w-3">{s}</span>
                     <div className="flex-grow h-2 bg-secondary rounded-full overflow-hidden">
-                      <div className="h-full bg-primary rounded-full" style={{ width: `${s * 15}%` }} />
+                      <div
+                        className="h-full bg-primary rounded-full"
+                        style={{ width: `${s * 15}%` }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -141,7 +179,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
         {/* Related Products */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-8">You Might Like This Product</h2>
+          <h2 className="text-2xl font-bold mb-8">
+            You Might Like This Product
+          </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {related.map((p: any) => (
               <ProductCard key={p.id} product={p} />
@@ -151,5 +191,5 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       </div>
       <Footer />
     </div>
-  )
+  );
 }

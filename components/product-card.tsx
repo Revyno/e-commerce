@@ -20,6 +20,7 @@ interface ProductCardProps {
     thumbnail: string
     brand?: string
     tags?: string[]
+    idEncrypted?: string
   }
 }
 
@@ -30,7 +31,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const isWishlisted = wishlist.includes(product.id)
   const isDisliked = dislikes.includes(product.id)
   const [imageLoading, setImageLoading] = useState(true)
-
+  console.log(product.idEncrypted);
   const discountedPrice = (product.price * (1 - product.discountPercentage / 100)).toFixed(2)
 
   return (
@@ -41,7 +42,7 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
         <Image
           src={product.thumbnail || "/placeholder.svg"}
-          alt={product.title}
+          alt={product.title || "Product image"}
           fill
           className="object-cover transition-transform group-hover:scale-105"
           onLoad={() => setImageLoading(false)}
@@ -73,6 +74,7 @@ export function ProductCard({ product }: ProductCardProps) {
         >
           <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
         </button>
+        {/* hover card transition */}
         <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
           <button
             onClick={(e) => {
@@ -91,11 +93,12 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
       </div>
 
-      <Link href={`/product/${product.id}`} className="block">
+      <Link href={`/product/${product.idEncrypted}`} className="block">
         <h3 className="text-sm font-medium mb-1 line-clamp-1">{product.title}</h3>
         <div className="flex items-center gap-1 mb-2">
           <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
           <span className="text-xs font-semibold">{product.rating}</span>
+          {/* dummy reviews */}
           <span className="text-xs text-muted-foreground">(225 reviews)</span>
         </div>
         <div className="flex items-center gap-2">

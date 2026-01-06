@@ -83,9 +83,17 @@ export function CartSidebar() {
               <span>Total</span>
               <span>${total.toFixed(2)}</span>
             </div>
-            <Button className="w-full rounded-xl bg-primary hover:bg-primary/90 py-6 text-base font-bold">
+            <hr/>
+            {/* buuton fixed */}
+            <div>
+              <Button className="w-full rounded-lg bg-primary hover:bg-primary/90 py-2  text-base font-bold">
+                Checkout
+              </Button>
+            </div>
+            <hr />
+            {/* <Button className="w-full rounded-lg bg-primary hover:bg-primary/90 py-2  text-base font-bold">
               Checkout
-            </Button>
+            </Button> */}
           </div>
         )}
       </SheetContent>
